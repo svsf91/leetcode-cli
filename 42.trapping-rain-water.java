@@ -28,17 +28,20 @@ class Solution {
         if(height.length == 0) {
             return 0;
         }
-        int[] left = new int[height.length];
-        int pre = 0;
-        for(int i = 0; i < height.length; i++) {
-            left[i] = pre;
-            pre = Math.max(pre, height[i]);
-        }
-        pre = 0;
+        int l = 0, r = height.length - 1;
         int count = 0;
-        for(int i = height.length - 1; i >= 0; i--) {
-            count += Math.max(Math.min(left[i], pre) - height[i], 0);
-            pre = Math.max(pre, height[i]);
+        while(l < r) {
+            int left = height[l];
+            int right = height[r];
+            if(left < right) {
+                while(l < r && height[l] <= left) {
+                    count += left - height[l++];
+                }
+            } else {
+                while(l < r && height[r] <= right) {
+                    count += right - height[r--];
+                }
+            }
         }
         return count;
     }
