@@ -50,9 +50,6 @@ class Solution {
         int[][] dp = new int[word1.length() + 1][word2.length() + 1];
 
         //TODO: set initial value
-        for(int[] row: dp) {
-            Arrays.fill(row, Integer.MAX_VALUE);
-        }
         dp[0][0] = 0;
         for(int i = 0; i < word1.length(); i++) {
             dp[i + 1][0] = i + 1;
