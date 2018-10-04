@@ -37,21 +37,28 @@
  */
 class Solution {
     public List<Integer> topKFrequent(int[] nums, int k) {
-        List<Integer> list = new ArrayList<>();
         Map<Integer, Integer> num2Freq = new HashMap<>();
-        for(int n : nums) {
-            num2Freq.put(n, num2Freq.getOrDefault(n, 0) + 1);
+        for(int i = 0; i < nums.length; i++) {
+            num2Freq.put(nums[i], num2Freq.getOrDefault(nums[i], 0) + 1);
         }
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        List<Integer>[] bucket = new List[nums.length + 1];
         for(int n: num2Freq.keySet()) {
-            pq.offer(new int[]{n, num2Freq.get(n)});
-            if(pq.size() > k) {
-                pq.poll();
+            int freq = num2Freq.get(n);
+            if(bucket[freq] == null) {
+                bucket[freq] = new ArrayList<>();
+            }
+            bucket[freq].add(n);
+        }
+        List<Integer> res = new ArrayList<>();
+        for(int i = nums.length; i >= 0; i--) {
+            if(bucket[i] != null) {
+                for(int n : bucket[i]) {
+                    if(k-- > 0) {
+                        res.add(n);
+                    }
+                }        
             }
         }
-        while(!pq.isEmpty()) {
-            list.add(pq.poll()[0]);
-        }
-        return list;
+        return res;
     }
 }
