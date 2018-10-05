@@ -50,13 +50,16 @@ class Solution {
         while(r < k - 1) {
             list.add(nums[r++]);
         }
+        Collections.sort(list);
         while(r < nums.length) {
             if(r >= k) {
                 int toDel = Collections.binarySearch(list, nums[r - k]);
                 list.remove(toDel);
             }
-            list.add(nums[r]);
-            Collections.sort(list);
+            int toInsert = Collections.binarySearch(list, nums[r]);
+            if(toInsert < 0) toInsert = -(toInsert + 1);
+            list.add(toInsert, nums[r]);
+            // System.out.println(list);
             if(k % 2 == 0) {
                 res[r - k + 1] = list.get(list.size() / 2 - 1) / 2.0 + list.get(list.size() / 2) / 2.0;
             } else {
