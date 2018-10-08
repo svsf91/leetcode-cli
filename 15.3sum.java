@@ -32,28 +32,40 @@
  */
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int num: nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        List<Integer> list = new ArrayList<>(map.keySet());
+        for(int i = 0; i < list.size(); i++) {
+            List<List<Integer>> tmp = twoSum(list, i + 1, -list.get(i));
+            for(List<Integer> l: tmp) {
+                l.add(list.get(i));
+                res.add(l);
+            }
+            if(map.get(list.get(i)) >= 3) {
+                if(3 * list.get(i) == 0) {
+                    res.add(new ArrayList<>(Arrays.asList(list.get(i), list.get(i), list.get(i))));
+                }
+            } 
+            if(map.get(list.get(i)) >= 2) {
+                if(map.containsKey(-2 * list.get(i)) && list.get(i) != 0) {
+                    res.add(new ArrayList<>(Arrays.asList(list.get(i), list.get(i), -2 * list.get(i))));                         
+                }
+            }
+        }
+        return res;
+    }
+    public List<List<Integer>> twoSum(List<Integer> nums, int start, int target) {
         List<List<Integer>> list = new ArrayList<>();
-        for(int i = 0; i < nums.length - 2; i++) {
-            if(i > 0 && nums[i] == nums[i - 1]) {
-                continue;
+        Set<Integer> set = new HashSet<>();
+        for(int i = start; i < nums.size(); i++) {
+            int num = nums.get(i);
+            if(set.contains(target - num)) {
+                list.add(new ArrayList<>(Arrays.asList(target - num, num)));
             }
-            int j = i + 1, k = nums.length - 1;
-            while(j < k) {
-                if(j > i + 1 && nums[j] == nums[j - 1]) {
-                    j++;
-                    continue;
-                }
-                if(nums[i] + nums[j] + nums[k] == 0) {
-                    list.add(Arrays.asList(nums[i], nums[j], nums[k]));
-                    j++;
-                    k--;
-                } else if(nums[i] + nums[j] + nums[k] < 0) {
-                    j++;
-                } else {
-                    k--;
-                }
-            }
+            set.add(num);
         }
         return list;
     }
