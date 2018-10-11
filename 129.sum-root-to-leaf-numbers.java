@@ -54,27 +54,20 @@
  * left; TreeNode right; TreeNode(int x) { val = x; } }
  */
 class Solution {
-    int total = 0;
 
     public int sumNumbers(TreeNode root) {
+        return count(root, 0);
+    }
+
+    public int count(TreeNode root, int cur) {
         if (root == null) {
             return 0;
         }
-        count(root, 0);
-        return total;
-    }
-
-    public void count(TreeNode root, int cur) {
         cur *= 10;
         cur += root.val;
         if (root.left == null && root.right == null) {
-            total += cur;
+            return cur;
         }
-        if (root.left != null) {
-            count(root.left, cur);
-        }
-        if (root.right != null) {
-            count(root.right, cur);
-        }
+        return count(root.left, cur) + count(root.right, cur);
     }
 }
