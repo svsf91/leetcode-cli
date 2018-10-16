@@ -20,18 +20,18 @@ public class Solution {
      */
     public int maxLen(int[] a) {
         // Write your code here
-        Map<Integer, Integer> map = new HashMap<>();
+        int[] bucket = new int[1001];
         int l = 0, r = 0;
         int len = 0;
+        int count = 0;
         while (r < a.length) {
-            map.put(a[r], map.getOrDefault(a[r], 0) + 1);
-            r++;
-            while (map.keySet().size() > 2) {
-                map.put(a[l], map.get(a[l]) - 1);
-                if (map.get(a[l]) == 0) {
-                    map.remove(a[l]);
+            if (bucket[a[r++]]++ == 0) {
+                count++;
+            }
+            while (count > 2) {
+                if (--bucket[a[l++]] == 0) {
+                    count--;
                 }
-                l++;
             }
             len = Math.max(len, r - l);
         }
